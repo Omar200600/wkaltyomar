@@ -183,7 +183,6 @@
 
     <script>
         // رابط الـ Webhook المخصص لمنصة Bika.ai لتلقي الطلبات وإطلاق الوكلاء
-        // (ضع الرابط هنا بمجرد استخراجه من Bika.ai)
         const BIKA_WEBHOOK_URL = "YOUR_BIKA_WEBHOOK_URL_HERE";
 
         let currentOffset = -7;
@@ -194,13 +193,15 @@
         window.addEventListener('load', () => {
             refreshStore();
             setTimeout(() => {
-                speechBubble.style.display = 'block';
-                speakText("مرحباً بك! وكلاء Bika الذكية جاهزون لإدارة وتسويق المنتجات داخل المشهد 3D.");
+                if (speechBubble) {
+                    speechBubble.style.display = 'block';
+                    speakText("مرحباً بك! وكلاء Bika الذكية جاهزون لإدارة وتسويق المنتجات داخل المشهد 3D.");
+                }
             }, 1500);
         });
 
         function speakText(text) {
-            if ('speechSynthesis' in window) {
+            if ('speechSynthesis' in window && text) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'ar-SA';
                 utterance.rate = 0.9;
@@ -210,41 +211,50 @@
 
         function showNotification(message) {
             const alertBox = document.getElementById('custom-alert');
-            alertBox.innerText = message;
+            if (!alertBox) return;
+            alertBox.innerText = message || "";
             alertBox.style.display = 'block';
             setTimeout(() => { alertBox.style.display = 'none'; }, 2500);
         }
 
         function refreshStore() {
+            if (!display || !listContainer) return;
             display.innerHTML = '';
             listContainer.innerHTML = '';
             currentOffset = -7;
             const saved = JSON.parse(localStorage.getItem('omar_agency_data')) || [];
             
             saved.forEach((item, index) => {
+                if (!item) return;
                 const box = document.createElement('a-box');
                 box.setAttribute('position', `${currentOffset} 1.5 -9.5`);
-                box.setAttribute('width', '2.5'); box.setAttribute('height', '2.5'); box.setAttribute('depth', '0.2');
-                box.setAttribute('material', {src: item.img, shader: 'flat'});
+                box.setAttribute('width', '2.5'); 
+                box.setAttribute('height', '2.5'); 
+                box.setAttribute('depth', '0.2');
+                box.setAttribute('material', {src: item.img || '', shader: 'flat'});
                 display.appendChild(box);
                 currentOffset += 3.5;
 
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'product-item';
-                itemDiv.innerHTML = `<span>${item.name}</span><button class="btn-delete" onclick="deleteItem(${index})">حذف</button>`;
+                itemDiv.innerHTML = `<span>${item.name || ''}</span><button class="btn-delete" onclick="deleteItem(${index})">حذف</button>`;
                 listContainer.appendChild(itemDiv);
             });
         }
 
         function addItem() {
-            const file = document.getElementById('pImg').files[0];
-            const name = document.getElementById('pName').value;
-            const price = document.getElementById('pPrice').value;
+            const fileInput = document.getElementById('pImg');
+            const nameInput = document.getElementById('pName');
+            const priceInput = document.getElementById('pPrice');
+
+            const file = fileInput?.files?.[0];
+            const name = nameInput?.value;
+            const price = priceInput?.value;
 
             if (file && name && price) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    const imgData = e.target.result;
+                    const imgData = e?.target?.result;
                     const saved = JSON.parse(localStorage.getItem('omar_agency_data')) || [];
                     const newItem = { img: imgData, name, price, date: new Date().toISOString() };
                     saved.push(newItem);
@@ -254,15 +264,16 @@
                     showNotification("🚀 تم الإضافة وإشعار وكيل Bika.ai للتسويق!");
                     speakText("تم إضافة المنتج، وقام وكيل Bika بالبدء في تجهيز الحملة التسويقية");
                     
-                    // إرسال البيانات لوكيل Bika.ai لإنشاء المحتوى الإعلاني تلقائياً
                     triggerBikaAgent({ action: 'new_product', product: name, price: price });
 
-                    document.getElementById('pName').value = '';
-                    document.getElementById('pPrice').value = '';
-                    document.getElementById('pImg').value = '';
+                    if (nameInput) nameInput.value = '';
+                    if (priceInput) priceInput.value = '';
+                    if (fileInput) fileInput.value = '';
                 };
                 reader.readAsDataURL(file);
-            } else { showNotification("⚠️ الرجاء إكمال كافة بيانات المنتج!"); }
+            } else { 
+                showNotification("⚠️ الرجاء إكمال كافة بيانات المنتج!"); 
+            }
         }
 
         function deleteItem(index) {
@@ -273,13 +284,12 @@
             showNotification("🗑️ تم حذف المنتج!");
         }
 
-        // تحفيز وكيل Bika.ai عبر الـ API / Webhook
         function triggerBikaAgent(payload) {
-            if(BIKA_WEBHOOK_URL && BIKA_WEBHOOK_URL !== "YOUR_BIKA_WEBHOOK_URL_HERE") {
+            if (BIKA_WEBHOOK_URL && BIKA_WEBHOOK_URL !== "YOUR_BIKA_WEBHOOK_URL_HERE") {
                 fetch(BIKA_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload || {})
                 }).catch(err => console.log("Bika Webhook Standby Mode"));
             } else {
                 console.log("Bika Webhook Pending URL Configuration");
@@ -287,48 +297,63 @@
         }
 
         // أزرار الحركة
-        var rig = document.getElementById('rig'); var head = document.getElementById('head');
+        var rig = document.getElementById('rig'); 
+        var head = document.getElementById('head');
         var keys = {up: false, down: false, left: false, right: false};
 
         function setupBtn(id, k) {
             var b = document.getElementById(id);
-            if(!b) return;
-            b.addEventListener('touchstart', (e)=>{e.preventDefault(); keys[k]=true;});
-            b.addEventListener('touchend', (e)=>{e.preventDefault(); keys[k]=false;});
-            b.addEventListener('mousedown', ()=>{keys[k]=true;});
-            b.addEventListener('mouseup', ()=>{keys[k]=false;});
+            if (!b) return;
+            b.addEventListener('touchstart', (e) => { e.preventDefault(); keys[k] = true; });
+            b.addEventListener('touchend', (e) => { e.preventDefault(); keys[k] = false; });
+            b.addEventListener('mousedown', () => { keys[k] = true; });
+            b.addEventListener('mouseup', () => { keys[k] = false; });
         }
-        setupBtn('up','up'); setupBtn('down','down'); setupBtn('left','left'); setupBtn('right','right');
+        setupBtn('up', 'up'); setupBtn('down', 'down'); setupBtn('left', 'left'); setupBtn('right', 'right');
 
         setInterval(() => {
-            var pos = rig.getAttribute('position'); var rot = head.getAttribute('rotation');
-            var ang = rot.y * Math.PI / 180; var s = 0.15;
+            if (!rig || !head) return;
+            var pos = rig.getAttribute('position'); 
+            var rot = head.getAttribute('rotation');
+            if (!pos || !rot) return;
+
+            var ang = (rot.y || 0) * Math.PI / 180; 
+            var s = 0.15;
             let nextX = pos.x, nextZ = pos.z;
 
-            if(keys.up){ nextX -= Math.sin(ang)*s; nextZ -= Math.cos(ang)*s; }
-            if(keys.down){ nextX += Math.sin(ang)*s; nextZ += Math.cos(ang)*s; }
-            if(keys.left){ nextX -= Math.cos(ang)*s; nextZ += Math.sin(ang)*s; }
-            if(keys.right){ nextX += Math.cos(ang)*s; nextZ -= Math.cos(ang)*s; }
+            if (keys.up) { nextX -= Math.sin(ang) * s; nextZ -= Math.cos(ang) * s; }
+            if (keys.down) { nextX += Math.sin(ang) * s; nextZ += Math.cos(ang) * s; }
+            if (keys.left) { nextX -= Math.cos(ang) * s; nextZ += Math.sin(ang) * s; }
+            if (keys.right) { nextX += Math.cos(ang) * s; nextZ -= Math.cos(ang) * s; }
             
             let distanceToCenter = Math.sqrt(nextX * nextX + nextZ * nextZ);
             if (nextX > -9.2 && nextX < 9.2 && nextZ > -9.2 && nextZ < 9.2 && distanceToCenter > 1.2) {
-                pos.x = nextX; pos.z = nextZ;
+                pos.x = nextX; 
+                pos.z = nextZ;
             }
             rig.setAttribute('position', pos);
         }, 20);
 
-        // إرسال طلب النموذج إلى وكيل Bika.ai للبريد الإلكتروني وتجهيز العقود
-        document.getElementById('agencyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const contact = document.getElementById('contact').value;
-            const service = document.getElementById('service').value;
-            const details = document.getElementById('details').value;
+        // إرسال طلب النموذج إلى وكيل Bika.ai
+        const agencyForm = document.getElementById('agencyForm');
+        if (agencyForm) {
+            agencyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nameInput = document.getElementById('name');
+                const contactInput = document.getElementById('contact');
+                const serviceInput = document.getElementById('service');
+                const detailsInput = document.getElementById('details');
 
-            triggerBikaAgent({ action: 'new_lead', name, contact, service, details });
+                const name = nameInput?.value || "";
+                const contact = contactInput?.value || "";
+                const service = serviceInput?.value || "";
+                const details = detailsInput?.value || "";
 
-            alert('تم استلام طلبك يا ' + name + '! يتولى وكيل Bika.ai معالجة الطلب حالياً وسيرسل لك العقد والتفاصيل عبر البريد/الواتساب.');
-        });
+                triggerBikaAgent({ action: 'new_lead', name, contact, service, details });
+
+                alert('تم استلام طلبك يا ' + name + '! يتولى وكيل Bika.ai معالجة الطلب حالياً وسيرسل لك العقد والتفاصيل عبر البريد/الواتساب.');
+            });
+        }
     </script>
 </body>
 </html>
