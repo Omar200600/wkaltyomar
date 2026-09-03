@@ -151,18 +151,18 @@
     <section class="contact-section" id="order">
         <h2>تعاقد مع الوكالة واستلم نظام الأتمتة 3D</h2>
         <div class="form-container">
-            <form id="agencyForm">
+            <form id="agencyForm" action="https://formspree.io/f/xgaeyjze" method="POST">
                 <div class="form-group">
                     <label>الاسم / الشركة:</label>
-                    <input type="text" id="name" required placeholder="اسم المتجر أو العميل">
+                    <input type="text" id="name" name="tenant_name" required placeholder="اسم المستأجر أو العميل">
                 </div>
                 <div class="form-group">
                     <label>البريد الإلكتروني / الواتساب:</label>
-                    <input type="text" id="contact" required placeholder="بيانات التواصل">
+                    <input type="text" id="contact" name="contact_info" required placeholder="بيانات التواصل">
                 </div>
                 <div class="form-group">
                     <label>نوع الوكيل المطلوبة ربطه:</label>
-                    <select id="service">
+                    <select id="service" name="selected_agent">
                         <option value="bika_email">وكيل البريد والتسويق (Email Agent)</option>
                         <option value="bika_social">وكيل السوشيال ميديا والإعلانات (AI Writer)</option>
                         <option value="bika_full">نظام الأتمتة الشامل للمتجر (Bika + 3D)</option>
@@ -170,9 +170,9 @@
                 </div>
                 <div class="form-group">
                     <label>ملاحظات إضافية:</label>
-                    <textarea id="details" rows="3" placeholder="اكتب متطلباتك..."></textarea>
+                    <textarea id="details" name="notes" rows="3" placeholder="اكتب متطلباتك..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">تأكيد الطلب وتشغيل وكلاء Bika.ai</button>
+                <button type="submit" id="submitBtn" class="btn-primary" style="width: 100%;">تأكيد الطلب وتشغيل وكلاء Bika.ai</button>
             </form>
         </div>
     </section>
@@ -182,8 +182,7 @@
     </footer>
 
     <script>
-        // رابط الـ Webhook المخصص لمنصة Bika.ai لتلقي الطلبات وإطلاق الوكلاء
-        const BIKA_WEBHOOK_URL = "YOUR_BIKA_WEBHOOK_URL_HERE";
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgaeyjze";
 
         let currentOffset = -7;
         const display = document.getElementById('product-display');
@@ -264,7 +263,12 @@
                     showNotification("🚀 تم الإضافة وإشعار وكيل Bika.ai للتسويق!");
                     speakText("تم إضافة المنتج، وقام وكيل Bika بالبدء في تجهيز الحملة التسويقية");
                     
-                    triggerBikaAgent({ action: 'new_product', product: name, price: price });
+                    // إرسال البيانات فوراً لـ Formspree
+                    const formData = new FormData();
+                    formData.append("event_type", "new_product_added");
+                    formData.append("product_name", name);
+                    formData.append("price", price);
+                    fetch(FORMSPREE_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }).catch(e => console.log(e));
 
                     if (nameInput) nameInput.value = '';
                     if (priceInput) priceInput.value = '';
@@ -282,18 +286,6 @@
             localStorage.setItem('omar_agency_data', JSON.stringify(s));
             refreshStore();
             showNotification("🗑️ تم حذف المنتج!");
-        }
-
-        function triggerBikaAgent(payload) {
-            if (BIKA_WEBHOOK_URL && BIKA_WEBHOOK_URL !== "YOUR_BIKA_WEBHOOK_URL_HERE") {
-                fetch(BIKA_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload || {})
-                }).catch(err => console.log("Bika Webhook Standby Mode"));
-            } else {
-                console.log("Bika Webhook Pending URL Configuration");
-            }
         }
 
         // أزرار الحركة
@@ -334,24 +326,32 @@
             rig.setAttribute('position', pos);
         }, 20);
 
-        // إرسال طلب النموذج إلى وكيل Bika.ai
+        // إرسال الطلب عبر Formspree بتقنية AJAX لمنع إعادة تحميل الصفحة
         const agencyForm = document.getElementById('agencyForm');
         if (agencyForm) {
             agencyForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const nameInput = document.getElementById('name');
-                const contactInput = document.getElementById('contact');
-                const serviceInput = document.getElementById('service');
-                const detailsInput = document.getElementById('details');
+                const submitBtn = document.getElementById('submitBtn');
+                if(submitBtn) submitBtn.innerText = "جاري الإرسال وتفعيل الوكيل...";
 
-                const name = nameInput?.value || "";
-                const contact = contactInput?.value || "";
-                const service = serviceInput?.value || "";
-                const details = detailsInput?.value || "";
-
-                triggerBikaAgent({ action: 'new_lead', name, contact, service, details });
-
-                alert('تم استلام طلبك يا ' + name + '! يتولى وكيل Bika.ai معالجة الطلب حالياً وسيرسل لك العقد والتفاصيل عبر البريد/الواتساب.');
+                const data = new FormData(agencyForm);
+                fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                }).then(response => {
+                    if (response.ok) {
+                        showNotification("✅ تم تسليم عقدك ولوكيل Bika بنجاح!");
+                        speakText("تم استلام العقد بنجاح، وبدأ وكيل Bika بالمعالجة");
+                        agencyForm.reset();
+                    } else {
+                        showNotification("❌ حدث خطأ في الإرسال، حاول مجدداً.");
+                    }
+                }).catch(error => {
+                    showNotification("❌ فشل الاتصال، يرجى المحاولة لاحقاً.");
+                }).finally(() => {
+                    if(submitBtn) submitBtn.innerText = "تأكيد الطلب وتشغيل وكلاء Bika.ai";
+                });
             });
         }
     </script>
