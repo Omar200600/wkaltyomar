@@ -25,7 +25,6 @@
         .btn-request:hover { background: #218838; }
 
         #avatar-speech-bubble { position: absolute; top: 20px; left: 20px; background: rgba(56, 189, 248, 0.95); color: #000; padding: 12px 18px; border-radius: 12px; z-index: 100; max-width: 280px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; }
-        #custom-alert { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 25px; border-radius: 5px; z-index: 10000; font-weight: bold; }
 
         .control-btn { position: absolute; width: 45px; height: 45px; background: rgba(212, 175, 55, 0.9); border: 2px solid white; border-radius: 50%; z-index: 100; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; touch-action: none; font-size: 18px; user-select: none; }
         #up { bottom: 90px; left: 65px; } 
@@ -115,8 +114,6 @@
         </a-scene>
     </section>
 
-    <div id="custom-alert"></div>
-
     <section class="services">
         <h2>منظومة Bika.ai + 3D المكتملة</h2>
         <div class="grid">
@@ -138,19 +135,18 @@
     <section class="contact-section" id="order">
         <h2>تعاقد مع الوكالة واستلم نظام الأتمتة 3D</h2>
         <div class="form-container">
-            <!-- تم إضافة رابط Formspree وإضافة خاصية name لكل حقل لضمان إرسال الرسالة إلى بريدك -->
-            <form id="agencyForm" action="https://formspree.io/f/mqakvjrq" method="POST">
+            <form id="agencyForm" onsubmit="sendToWhatsApp(event)">
                 <div class="form-group">
                     <label>الاسم / الشركة:</label>
-                    <input type="text" name="name" id="name" required placeholder="اسم المتجر أو العميل">
+                    <input type="text" id="name" required placeholder="اسم المتجر أو العميل">
                 </div>
                 <div class="form-group">
-                    <label>البريد الإلكتروني / الواتساب:</label>
-                    <input type="text" name="contact" id="contact" required placeholder="بيانات التواصل">
+                    <label>البريد الإلكتروني / الواتساب للعميل:</label>
+                    <input type="text" id="contact" required placeholder="بيانات التواصل الخاصة بالعميل">
                 </div>
                 <div class="form-group">
                     <label>نوع الخدمة أو الوكيل المطلوب:</label>
-                    <select name="service" id="service">
+                    <select id="service">
                         <option value="تجهيز متجر / معرض 3D مع مجسمات خاصة">تجهيز متجر / معرض 3D مع مجسمات خاصة</option>
                         <option value="وكيل البريد والتسويق (Email Agent)">وكيل البريد والتسويق (Email Agent)</option>
                         <option value="وكيل السوشيال ميديا والإعلانات (AI Writer)">وكيل السوشيال ميديا والإعلانات (AI Writer)</option>
@@ -158,10 +154,16 @@
                 </div>
                 <div class="form-group">
                     <label>ملاحظات إضافية / تفاصيل المنتجات:</label>
-                    <textarea name="details" id="details" rows="3" placeholder="اكتب متطلباتك أو المنتجات المراد إضافتها..."></textarea>
+                    <textarea id="details" rows="3" placeholder="اكتب متطلباتك أو المنتجات المراد إضافتها..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">تأكيد الطلب وتشغيل وكلاء Bika.ai</button>
+                <button type="submit" class="btn-primary" style="width: 100%; background: #25D366; font-size: 1.1rem; margin-bottom: 10px;">
+                    إرسال الطلب عبر الواتساب مباشرة 💬
+                </button>
             </form>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #94a3b8;">
+                أو يمكنك المراسلة المباشرة عبر البريد الإلكتروني: <br>
+                <a href="mailto:omarebrah2060@gmail.com" style="color: #38bdf8; text-decoration: underline;">omarebrah2060@gmail.com</a>
+            </p>
         </div>
     </section>
 
@@ -186,6 +188,24 @@
                 utterance.rate = 0.9;
                 window.speechSynthesis.speak(utterance);
             }
+        }
+
+        // دالة تحويل الطلب تلقائياً للواتساب الخاص بك
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+            var myNumber = "967737219181"; 
+            var name = document.getElementById('name').value;
+            var contact = document.getElementById('contact').value;
+            var service = document.getElementById('service').value;
+            var details = document.getElementById('details').value;
+
+            var message = "📌 *طلب جديد من وكالة 3D & AI Agency*:%0A%0A" +
+                          "👤 *الاسم/الشركة:* " + encodeURIComponent(name) + "%0A" +
+                          "📞 *تواصل العميل:* " + encodeURIComponent(contact) + "%0A" +
+                          "🛠️ *نوع الخدمة:* " + encodeURIComponent(service) + "%0A" +
+                          "📝 *الملاحظات:* " + encodeURIComponent(details);
+
+            window.open("https://wa.me/" + myNumber + "?text=" + message, '_blank');
         }
 
         // أزرار الحركة
