@@ -57,7 +57,7 @@
     <section class="hero">
         <div class="hero-text">
             <h1>وكالة الحلول 3D ومُشغّل وكلاء Bika.ai</h1>
-            <p>نجمع بين المعارض ثلاثية الأبعاد المذهلة وأتمتة الذكاء الاصطناعي الكاملة عبر فريق عمل افتراضي (Bika AI Agents) يعمل لصالح مشروعك 24/7.</p>
+            <p>نجمع بين المعارض ثلاثية الأبعاد المذهلة وأتمتة الذكاء الاصطناعي الكاملة عبر فريق عمل افتراضي (Bika AI Agents) يعمل لص لصالح مشروعك 24/7.</p>
         </div>
 
         <div id="avatar-speech-bubble">🤖 أهلاً بك! أنا الوكيل الافتراضي. نسعد بتصميم معارضكم ثلاثية الأبعاد وأتمتة التسويق وعقود المتاجر آلياً!</div>
@@ -138,26 +138,27 @@
     <section class="contact-section" id="order">
         <h2>تعاقد مع الوكالة واستلم نظام الأتمتة 3D</h2>
         <div class="form-container">
-            <form id="agencyForm">
+            <!-- تم إضافة رابط Formspree وإضافة خاصية name لكل حقل لضمان إرسال الرسالة إلى بريدك -->
+            <form id="agencyForm" action="https://formspree.io/f/mqakvjrq" method="POST">
                 <div class="form-group">
                     <label>الاسم / الشركة:</label>
-                    <input type="text" id="name" required placeholder="اسم المتجر أو العميل">
+                    <input type="text" name="name" id="name" required placeholder="اسم المتجر أو العميل">
                 </div>
                 <div class="form-group">
                     <label>البريد الإلكتروني / الواتساب:</label>
-                    <input type="text" id="contact" required placeholder="بيانات التواصل">
+                    <input type="text" name="contact" id="contact" required placeholder="بيانات التواصل">
                 </div>
                 <div class="form-group">
                     <label>نوع الخدمة أو الوكيل المطلوب:</label>
-                    <select id="service">
-                        <option value="bika_full">تجهيز متجر / معرض 3D مع مجسمات خاصة</option>
-                        <option value="bika_email">وكيل البريد والتسويق (Email Agent)</option>
-                        <option value="bika_social">وكيل السوشيال ميديا والإعلانات (AI Writer)</option>
+                    <select name="service" id="service">
+                        <option value="تجهيز متجر / معرض 3D مع مجسمات خاصة">تجهيز متجر / معرض 3D مع مجسمات خاصة</option>
+                        <option value="وكيل البريد والتسويق (Email Agent)">وكيل البريد والتسويق (Email Agent)</option>
+                        <option value="وكيل السوشيال ميديا والإعلانات (AI Writer)">وكيل السوشيال ميديا والإعلانات (AI Writer)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>ملاحظات إضافية / تفاصيل المنتجات:</label>
-                    <textarea id="details" rows="3" placeholder="اكتب متطلباتك أو المنتجات المراد إضافتها..."></textarea>
+                    <textarea name="details" id="details" rows="3" placeholder="اكتب متطلباتك أو المنتجات المراد إضافتها..."></textarea>
                 </div>
                 <button type="submit" class="btn-primary" style="width: 100%;">تأكيد الطلب وتشغيل وكلاء Bika.ai</button>
             </form>
@@ -169,7 +170,6 @@
     </footer>
 
     <script>
-        const BIKA_WEBHOOK_URL = "YOUR_BIKA_WEBHOOK_URL_HERE";
         const speechBubble = document.getElementById('avatar-speech-bubble');
 
         window.addEventListener('load', () => {
@@ -185,16 +185,6 @@
                 utterance.lang = 'ar-SA';
                 utterance.rate = 0.9;
                 window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        function triggerBikaAgent(payload) {
-            if(BIKA_WEBHOOK_URL && BIKA_WEBHOOK_URL !== "YOUR_BIKA_WEBHOOK_URL_HERE") {
-                fetch(BIKA_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                }).catch(err => console.log("Bika Webhook Standby Mode"));
             }
         }
 
@@ -228,19 +218,6 @@
             }
             rig.setAttribute('position', pos);
         }, 20);
-
-        // إرسال طلب النموذج
-        document.getElementById('agencyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const contact = document.getElementById('contact').value;
-            const service = document.getElementById('service').value;
-            const details = document.getElementById('details').value;
-
-            triggerBikaAgent({ action: 'new_lead', name, contact, service, details });
-
-            alert('تم استلام طلبك بنجاح يا ' + name + '! سيتواصل معك فريق العمل/الوكيل الآلي لإنهاء تجهيز وتخصيص معرضك.');
-        });
     </script>
 </body>
 </html>
