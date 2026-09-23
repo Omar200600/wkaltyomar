@@ -11,25 +11,21 @@
         header { background: rgba(15, 23, 42, 0.95); position: fixed; top: 0; width: 100%; z-index: 1000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
         .logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; }
         .btn-primary { background: #2563eb; color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-block; }
-        
+        .btn-primary:hover { background: #1d4ed8; }
+
         .hero { height: 75vh; position: relative; margin-top: 60px; }
         .hero-text { position: absolute; top: 20px; right: 20px; z-index: 100; max-width: 420px; background: rgba(15, 23, 42, 0.9); padding: 1.5rem; border-radius: 12px; border: 1px solid #38bdf8; }
         .hero-text h1 { font-size: 1.7rem; margin-bottom: 0.5rem; color: #38bdf8; }
         
         .a-dialog, .a-dialog-container, .a-enter-vr, .a-enter-ar { display: none !important; }
 
-        #management-ui { position: absolute; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.95); padding: 10px; border: 2px solid #28a745; border-radius: 10px; z-index: 100; width: 190px; color: #333; }
-        #products-list-ui { position: absolute; bottom: 20px; right: 220px; background: rgba(255, 255, 255, 0.95); padding: 8px; border: 2px solid #D4AF37; border-radius: 10px; z-index: 100; width: 185px; font-size: 11px; color: #333; }
-        #list-container { display: flex; flex-direction: row; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
-        .product-item { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; background: #f9f9f9; border: 1px solid #ddd; padding: 4px; border-radius: 6px; width: 55px; text-align: center; }
-        .product-item span { max-width: 50px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 3px; font-weight: bold; }
-        .btn-delete { background: #ff4d4d; color: white; border: none; padding: 2px 5px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; width: 100%; }
-        
+        #custom-request-ui { position: absolute; bottom: 20px; right: 20px; background: rgba(15, 23, 42, 0.95); padding: 12px 18px; border: 2px solid #28a745; border-radius: 12px; z-index: 100; color: #fff; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        #custom-request-ui h4 { font-size: 0.95rem; margin-bottom: 6px; color: #38bdf8; }
+        .btn-request { background: #28a745; color: white; padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .btn-request:hover { background: #218838; }
+
         #avatar-speech-bubble { position: absolute; top: 20px; left: 20px; background: rgba(56, 189, 248, 0.95); color: #000; padding: 12px 18px; border-radius: 12px; z-index: 100; max-width: 280px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; }
         #custom-alert { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 25px; border-radius: 5px; z-index: 10000; font-weight: bold; }
-
-        .btn-action { width: 100%; padding: 6px; margin-top: 5px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; color: white; }
-        input { width: 95%; margin: 3px 0; padding: 4px; }
 
         .control-btn { position: absolute; width: 45px; height: 45px; background: rgba(212, 175, 55, 0.9); border: 2px solid white; border-radius: 50%; z-index: 100; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; touch-action: none; font-size: 18px; user-select: none; }
         #up { bottom: 90px; left: 65px; } 
@@ -64,18 +60,11 @@
             <p>نجمع بين المعارض ثلاثية الأبعاد المذهلة وأتمتة الذكاء الاصطناعي الكاملة عبر فريق عمل افتراضي (Bika AI Agents) يعمل لصالح مشروعك 24/7.</p>
         </div>
 
-        <div id="avatar-speech-bubble">🤖 أهلاً بك! أنا الوكيل الافتراضي. مشغّل بواسطة Bika.ai لأتمتة التسويق، الإعلانات، وعقود المتاجر تلقائياً!</div>
+        <div id="avatar-speech-bubble">🤖 أهلاً بك! أنا الوكيل الافتراضي. نسعد بتصميم معارضكم ثلاثية الأبعاد وأتمتة التسويق وعقود المتاجر آلياً!</div>
 
-        <div id="management-ui">
-            <input type="file" id="pImg" accept="image/*">
-            <input type="text" id="pName" placeholder="اسم المنتج">
-            <input type="number" id="pPrice" placeholder="السعر ($)">
-            <button class="btn-action" style="background:#28a745;" onclick="addItem()">إضافة منتج وأتمتة التسويق 🚀</button>
-        </div>
-
-        <div id="products-list-ui">
-            <strong style="display:block; margin-bottom: 3px;">📦 المنتجات المعروضة:</strong>
-            <div id="list-container"></div>
+        <div id="custom-request-ui">
+            <h4>راغب في إضافة منتجاتك وبناء متجرك؟</h4>
+            <a href="#order" class="btn-request">طلب تخصيص متجر / إضافة مجسمات 3D 🚀</a>
         </div>
 
         <div id="up" class="control-btn">↑</div>
@@ -120,8 +109,6 @@
                 </a-entity>
             </a-entity>
 
-            <a-entity id="product-display"></a-entity>
-
             <a-entity id="rig" position="0 1.6 5">
                 <a-entity id="head" camera look-controls></a-entity>
             </a-entity>
@@ -151,28 +138,28 @@
     <section class="contact-section" id="order">
         <h2>تعاقد مع الوكالة واستلم نظام الأتمتة 3D</h2>
         <div class="form-container">
-            <form id="agencyForm" action="https://formspree.io/f/xgaeyjze" method="POST">
+            <form id="agencyForm">
                 <div class="form-group">
                     <label>الاسم / الشركة:</label>
-                    <input type="text" id="name" name="tenant_name" required placeholder="اسم المستأجر أو العميل">
+                    <input type="text" id="name" required placeholder="اسم المتجر أو العميل">
                 </div>
                 <div class="form-group">
                     <label>البريد الإلكتروني / الواتساب:</label>
-                    <input type="text" id="contact" name="contact_info" required placeholder="بيانات التواصل">
+                    <input type="text" id="contact" required placeholder="بيانات التواصل">
                 </div>
                 <div class="form-group">
-                    <label>نوع الوكيل المطلوبة ربطه:</label>
-                    <select id="service" name="selected_agent">
+                    <label>نوع الخدمة أو الوكيل المطلوب:</label>
+                    <select id="service">
+                        <option value="bika_full">تجهيز متجر / معرض 3D مع مجسمات خاصة</option>
                         <option value="bika_email">وكيل البريد والتسويق (Email Agent)</option>
                         <option value="bika_social">وكيل السوشيال ميديا والإعلانات (AI Writer)</option>
-                        <option value="bika_full">نظام الأتمتة الشامل للمتجر (Bika + 3D)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>ملاحظات إضافية:</label>
-                    <textarea id="details" name="notes" rows="3" placeholder="اكتب متطلباتك..."></textarea>
+                    <label>ملاحظات إضافية / تفاصيل المنتجات:</label>
+                    <textarea id="details" rows="3" placeholder="اكتب متطلباتك أو المنتجات المراد إضافتها..."></textarea>
                 </div>
-                <button type="submit" id="submitBtn" class="btn-primary" style="width: 100%;">تأكيد الطلب وتشغيل وكلاء Bika.ai</button>
+                <button type="submit" class="btn-primary" style="width: 100%;">تأكيد الطلب وتشغيل وكلاء Bika.ai</button>
             </form>
         </div>
     </section>
@@ -182,25 +169,18 @@
     </footer>
 
     <script>
-        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgaeyjze";
-
-        let currentOffset = -7;
-        const display = document.getElementById('product-display');
-        const listContainer = document.getElementById('list-container');
+        const BIKA_WEBHOOK_URL = "YOUR_BIKA_WEBHOOK_URL_HERE";
         const speechBubble = document.getElementById('avatar-speech-bubble');
 
         window.addEventListener('load', () => {
-            refreshStore();
             setTimeout(() => {
-                if (speechBubble) {
-                    speechBubble.style.display = 'block';
-                    speakText("مرحباً بك! وكلاء Bika الذكية جاهزون لإدارة وتسويق المنتجات داخل المشهد 3D.");
-                }
+                speechBubble.style.display = 'block';
+                speakText("مرحباً بك! يمكنك طلب تصميم متجرك التفاعلي وتخصيص المجسمات ثلاثية الأبعاد من خلال زر الطلب مباشرة.");
             }, 1500);
         });
 
         function speakText(text) {
-            if ('speechSynthesis' in window && text) {
+            if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'ar-SA';
                 utterance.rate = 0.9;
@@ -208,152 +188,59 @@
             }
         }
 
-        function showNotification(message) {
-            const alertBox = document.getElementById('custom-alert');
-            if (!alertBox) return;
-            alertBox.innerText = message || "";
-            alertBox.style.display = 'block';
-            setTimeout(() => { alertBox.style.display = 'none'; }, 2500);
-        }
-
-        function refreshStore() {
-            if (!display || !listContainer) return;
-            display.innerHTML = '';
-            listContainer.innerHTML = '';
-            currentOffset = -7;
-            const saved = JSON.parse(localStorage.getItem('omar_agency_data')) || [];
-            
-            saved.forEach((item, index) => {
-                if (!item) return;
-                const box = document.createElement('a-box');
-                box.setAttribute('position', `${currentOffset} 1.5 -9.5`);
-                box.setAttribute('width', '2.5'); 
-                box.setAttribute('height', '2.5'); 
-                box.setAttribute('depth', '0.2');
-                box.setAttribute('material', {src: item.img || '', shader: 'flat'});
-                display.appendChild(box);
-                currentOffset += 3.5;
-
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'product-item';
-                itemDiv.innerHTML = `<span>${item.name || ''}</span><button class="btn-delete" onclick="deleteItem(${index})">حذف</button>`;
-                listContainer.appendChild(itemDiv);
-            });
-        }
-
-        function addItem() {
-            const fileInput = document.getElementById('pImg');
-            const nameInput = document.getElementById('pName');
-            const priceInput = document.getElementById('pPrice');
-
-            const file = fileInput?.files?.[0];
-            const name = nameInput?.value;
-            const price = priceInput?.value;
-
-            if (file && name && price) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const imgData = e?.target?.result;
-                    const saved = JSON.parse(localStorage.getItem('omar_agency_data')) || [];
-                    const newItem = { img: imgData, name, price, date: new Date().toISOString() };
-                    saved.push(newItem);
-                    localStorage.setItem('omar_agency_data', JSON.stringify(saved));
-                    
-                    refreshStore();
-                    showNotification("🚀 تم الإضافة وإشعار وكيل Bika.ai للتسويق!");
-                    speakText("تم إضافة المنتج، وقام وكيل Bika بالبدء في تجهيز الحملة التسويقية");
-                    
-                    // إرسال البيانات فوراً لـ Formspree
-                    const formData = new FormData();
-                    formData.append("event_type", "new_product_added");
-                    formData.append("product_name", name);
-                    formData.append("price", price);
-                    fetch(FORMSPREE_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }).catch(e => console.log(e));
-
-                    if (nameInput) nameInput.value = '';
-                    if (priceInput) priceInput.value = '';
-                    if (fileInput) fileInput.value = '';
-                };
-                reader.readAsDataURL(file);
-            } else { 
-                showNotification("⚠️ الرجاء إكمال كافة بيانات المنتج!"); 
+        function triggerBikaAgent(payload) {
+            if(BIKA_WEBHOOK_URL && BIKA_WEBHOOK_URL !== "YOUR_BIKA_WEBHOOK_URL_HERE") {
+                fetch(BIKA_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.log("Bika Webhook Standby Mode"));
             }
         }
 
-        function deleteItem(index) {
-            let s = JSON.parse(localStorage.getItem('omar_agency_data')) || [];
-            s.splice(index, 1);
-            localStorage.setItem('omar_agency_data', JSON.stringify(s));
-            refreshStore();
-            showNotification("🗑️ تم حذف المنتج!");
-        }
-
         // أزرار الحركة
-        var rig = document.getElementById('rig'); 
-        var head = document.getElementById('head');
+        var rig = document.getElementById('rig'); var head = document.getElementById('head');
         var keys = {up: false, down: false, left: false, right: false};
 
         function setupBtn(id, k) {
             var b = document.getElementById(id);
-            if (!b) return;
-            b.addEventListener('touchstart', (e) => { e.preventDefault(); keys[k] = true; });
-            b.addEventListener('touchend', (e) => { e.preventDefault(); keys[k] = false; });
-            b.addEventListener('mousedown', () => { keys[k] = true; });
-            b.addEventListener('mouseup', () => { keys[k] = false; });
+            if(!b) return;
+            b.addEventListener('touchstart', (e)=>{e.preventDefault(); keys[k]=true;});
+            b.addEventListener('touchend', (e)=>{e.preventDefault(); keys[k]=false;});
+            b.addEventListener('mousedown', ()=>{keys[k]=true;});
+            b.addEventListener('mouseup', ()=>{keys[k]=false;});
         }
-        setupBtn('up', 'up'); setupBtn('down', 'down'); setupBtn('left', 'left'); setupBtn('right', 'right');
+        setupBtn('up','up'); setupBtn('down','down'); setupBtn('left','left'); setupBtn('right','right');
 
         setInterval(() => {
-            if (!rig || !head) return;
-            var pos = rig.getAttribute('position'); 
-            var rot = head.getAttribute('rotation');
-            if (!pos || !rot) return;
-
-            var ang = (rot.y || 0) * Math.PI / 180; 
-            var s = 0.15;
+            var pos = rig.getAttribute('position'); var rot = head.getAttribute('rotation');
+            var ang = rot.y * Math.PI / 180; var s = 0.15;
             let nextX = pos.x, nextZ = pos.z;
 
-            if (keys.up) { nextX -= Math.sin(ang) * s; nextZ -= Math.cos(ang) * s; }
-            if (keys.down) { nextX += Math.sin(ang) * s; nextZ += Math.cos(ang) * s; }
-            if (keys.left) { nextX -= Math.cos(ang) * s; nextZ += Math.sin(ang) * s; }
-            if (keys.right) { nextX += Math.cos(ang) * s; nextZ -= Math.cos(ang) * s; }
+            if(keys.up){ nextX -= Math.sin(ang)*s; nextZ -= Math.cos(ang)*s; }
+            if(keys.down){ nextX += Math.sin(ang)*s; nextZ += Math.cos(ang)*s; }
+            if(keys.left){ nextX -= Math.cos(ang)*s; nextZ += Math.sin(ang)*s; }
+            if(keys.right){ nextX += Math.cos(ang)*s; nextZ -= Math.cos(ang)*s; }
             
             let distanceToCenter = Math.sqrt(nextX * nextX + nextZ * nextZ);
             if (nextX > -9.2 && nextX < 9.2 && nextZ > -9.2 && nextZ < 9.2 && distanceToCenter > 1.2) {
-                pos.x = nextX; 
-                pos.z = nextZ;
+                pos.x = nextX; pos.z = nextZ;
             }
             rig.setAttribute('position', pos);
         }, 20);
 
-        // إرسال الطلب عبر Formspree بتقنية AJAX لمنع إعادة تحميل الصفحة
-        const agencyForm = document.getElementById('agencyForm');
-        if (agencyForm) {
-            agencyForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const submitBtn = document.getElementById('submitBtn');
-                if(submitBtn) submitBtn.innerText = "جاري الإرسال وتفعيل الوكيل...";
+        // إرسال طلب النموذج
+        document.getElementById('agencyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const contact = document.getElementById('contact').value;
+            const service = document.getElementById('service').value;
+            const details = document.getElementById('details').value;
 
-                const data = new FormData(agencyForm);
-                fetch(FORMSPREE_ENDPOINT, {
-                    method: 'POST',
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
-                }).then(response => {
-                    if (response.ok) {
-                        showNotification("✅ تم تسليم عقدك ولوكيل Bika بنجاح!");
-                        speakText("تم استلام العقد بنجاح، وبدأ وكيل Bika بالمعالجة");
-                        agencyForm.reset();
-                    } else {
-                        showNotification("❌ حدث خطأ في الإرسال، حاول مجدداً.");
-                    }
-                }).catch(error => {
-                    showNotification("❌ فشل الاتصال، يرجى المحاولة لاحقاً.");
-                }).finally(() => {
-                    if(submitBtn) submitBtn.innerText = "تأكيد الطلب وتشغيل وكلاء Bika.ai";
-                });
-            });
-        }
+            triggerBikaAgent({ action: 'new_lead', name, contact, service, details });
+
+            alert('تم استلام طلبك بنجاح يا ' + name + '! سيتواصل معك فريق العمل/الوكيل الآلي لإنهاء تجهيز وتخصيص معرضك.');
+        });
     </script>
 </body>
 </html>
