@@ -24,10 +24,13 @@
     .agent-section { max-width: 1200px; margin: 30px auto; padding: 25px; background: #1e293b; border-radius: 12px; border: 1px solid #334155; }
     .agent-section h2 { color: #38bdf8; margin-bottom: 15px; text-align: center; }
     .api-box { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 20px; text-align: center; color: #38bdf8; font-size: 0.95rem; }
-    .form-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    input, select, button { padding: 12px; font-size: 15px; border-radius: 6px; border: 1px solid #334155; }
-    input { flex: 2; min-width: 200px; background: #0f172a; color: #fff; }
-    .btn-search { background: #2563eb; color: #fff; border: none; cursor: pointer; font-weight: bold; }
+    .form-group { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    input, select, button { padding: 12px; font-size: 14px; border-radius: 6px; border: 1px solid #334155; }
+    input { flex: 1; min-width: 220px; background: #0f172a; color: #fff; }
+    .links-group { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px dashed #38bdf8; margin-bottom: 20px; }
+    .links-group h4 { color: #38bdf8; margin-bottom: 10px; font-size: 0.95rem; }
+    
+    .btn-search { background: #2563eb; color: #fff; border: none; cursor: pointer; font-weight: bold; width: 100%; padding: 14px; font-size: 16px; margin-top: 5px; }
     .btn-search:hover { background: #1d4ed8; }
     .btn-export { background: #10b981; color: #fff; border: none; cursor: pointer; font-weight: bold; }
     .btn-export:hover { background: #059669; }
@@ -69,7 +72,7 @@
   <section class="hero">
     <div class="hero-text">
       <h1>وكيل التسويق والبحث الآلي (3D Axis)</h1>
-      <p>يبحث ذكاء الوكيل تلقائياً عن أي هدف تحتاره (مدارس، شركات، متاجر)، يختبر أرقام التواصل ويصيغ رسائل بيع مخصصة لربطهم عبر الواتساب والإيميل مباشرة.</p>
+      <p>يبحث ذكاء الوكيل تلقائياً عن أي هدف تختاره، ويصيغ رسائل مخصصة تحتوي على روابط وكالتك المعاينة ولوحات التعاقد لإرسالها عبر الواتساب والإيميل.</p>
     </div>
 
     <a-scene embedded style="width: 100%; height: 100%;" light="defaultLightsEnabled: false" vr-mode-ui="enabled: false">
@@ -86,22 +89,32 @@
     </a-scene>
   </section>
 
-  <!-- لوحة الوكيل الذكي للبحث والتسويق والبيع -->
+  <!-- لوحة الوكيل الذكي -->
   <section class="agent-section" id="agent-panel">
-    <h2>🤖 وكيل البحث والتسويق الذكي (مرن وديناميكي)</h2>
+    <h2>🤖 وكيل البحث والتسويق الذكي المدمج بروابط المعاينة والتعاقد</h2>
     
     <div class="api-box">
-      ✨ اكتب أي نوع مستهدف (شركات، مستشفيات، مدارس، عقارات) وسيتكيف الوكيل الذكي مع طلبك فوراً!
+      ✨ يدمج الوكيل روابط معرض أعمالك والغرف الـ 3D مباشرة في الرسالة الموجهة للعميل لزيادة نسبة المبيعات والتعاقد!
+    </div>
+
+    <!-- روابط المعاينة الخاصة بمدير المنصة -->
+    <div class="links-group">
+      <h4>🔗 روابط الوكالة والغرف الثلاثية الأبعاد (للمعاينة والتعاقد):</h4>
+      <div class="form-group">
+        <input type="text" id="agencyUrl" placeholder="رابط الوكالة الرئيسي / لوحة التعاقد" value="https://Omar200600.github.io/3d-axis">
+        <input type="text" id="demoRoomUrl" placeholder="رابط الغرفة 3D التفاعلية للمعاينة" value="https://Omar200600.github.io/3d-axis/demo">
+      </div>
     </div>
 
     <div class="form-group">
-      <input type="text" id="targetType" placeholder="الهدف (مثال: شركات تجارية، مدارس أهلية، مطاعم)" value="شركات تجارية">
+      <input type="text" id="targetType" placeholder="الهدف (مثال: شركات تجارية، مدارس أهلية، مستشفيات)" value="شركات تجارية">
       <input type="text" id="location" placeholder="المنطقة / الدولة (مثال: دول الخليج، اليمن، السعودية)" value="دول الخليج واليمن">
-      <button class="btn-search" onclick="startSalesAgent()">بدء البحث والتسويق الآلي 🚀</button>
-      <button class="btn-export" onclick="exportToCSV()">تصدير البيانات (CSV)</button>
+      <button class="btn-export" onclick="exportToCSV()" style="padding: 12px 20px;">تصدير البيانات (CSV)</button>
     </div>
 
-    <div id="statusBox" class="status"></div>
+    <button class="btn-search" onclick="startSalesAgent()">بدء البحث والتسويق الآلي وإدراج الروابط 🚀</button>
+
+    <div id="statusBox" class="status" style="margin-top: 15px;"></div>
 
     <table>
       <thead>
@@ -111,7 +124,7 @@
           <th>النوع</th>
           <th>الدولة / رقم التواصل</th>
           <th>الخدمة المقترحة</th>
-          <th>رسالة العرض (Pitch)</th>
+          <th>رسالة العرض + رابط المعاينة والتعاقد</th>
           <th>إجراءات الإرسال (واتساب / إيميل)</th>
         </tr>
       </thead>
@@ -152,6 +165,8 @@
     async function startSalesAgent() {
       const target = document.getElementById('targetType').value.trim();
       const region = document.getElementById('location').value.trim();
+      const agencyUrl = document.getElementById('agencyUrl').value.trim();
+      const demoRoomUrl = document.getElementById('demoRoomUrl').value.trim();
       const tableBody = document.getElementById('resultsTable');
 
       if (!target || !region) {
@@ -159,26 +174,21 @@
         return;
       }
 
-      showStatus(`🔍 جاري تشغيل الطريقة السحرية للبحث عن (${target}) في (${region}) وتوليد عروض المبيعات المخصصة...`, 'loading');
+      showStatus(`🔍 جاري البحث عن (${target}) في (${region}) وتجهيز رسائل العرض المدمجة بروابط المعاينة والتعاقد...`, 'loading');
       tableBody.innerHTML = '';
 
-      const promptText = `أنت وكيل مبيعات وتسويق ذكي ومحترف لوكالة "3D Axis Solutions".
-خدمات وكالتنا:
-1. المتاجر والمعارض والشركات الافتراضية الثلاثية الأبعاد (3D Web Spaces).
-2. الأفتار الذكي الافتراضي (AI Avatars) لخدمة العملاء والمبيعات.
-3. أنظمة أتمتة المراسلة والربط الآلي للأنشطة.
-
+      const promptText = `أنت وكيل مبيعات وتسويق محترف لوكالة "3D Axis Solutions".
 المطلوب:
-اقترح وصنع قائمة دقيقة ومنظمة من 5 إلى 6 من أبرز وأشهر (${target}) في (${region}).
-لكل جهة أو شركة، حدد:
-- name: اسم الجهة أو الشركة بدقة.
+صنع قائمة دقيقة من 5 إلى 6 من أهداف (${target}) في (${region}).
+لكل جهة، حدد:
+- name: اسم الجهة بدقة.
 - type: النوع (${target}).
-- city: المدينة أو الدولة.
-- contact: رقم هاتف تواصل بتنسيق دولي (مثال: +9665xxxxxxxx).
-- suggested_service: الخدمة الأنسب من خدماتنا.
-- pitch_message: رسالة عرض تسويقي قصيرة ومباشرة وموجهة خصيصاً لهذه الجهة لإقناعهم بالتعاون معنا.
+- city: المدينة/الدولة.
+- contact: رقم هاتف دولي (+9665...).
+- suggested_service: الخدمة الأنسب.
+- pitch_message: رسالة عرض تسويقي قوية ومباشرة تدعو مدير الجهة لمعاينة الغرفة الافتراضية والتعاقد مباشرة عبر الرابط.
 
-أرجع الناتج بصيغة JSON Array سليمة ونظيفة تبدأ بـ [ وتنتهي بـ ] بدون أي تفاصيل خارجة عنها.`;
+أرجع الناتج بصيغة JSON Array فقط بدون أي كلام خارجي.`;
 
       try {
         const endpoint = `https://text.pollinations.ai/${encodeURIComponent(promptText)}`;
@@ -199,12 +209,10 @@
         try {
           collectedLeads = JSON.parse(jsonString);
         } catch (parseError) {
-          console.warn("تفعيل مولد البيانات الاحتياطي الذكي والمتكيف مع نوع البحث...", parseError);
-          
-          // توليد بيانات احتياطية ذكية تتكيف ديناميكياً مع ما كتبه المستخدم في خانة target
+          console.warn("تفعيل البيانات الاحتياطية المتكيفة...", parseError);
           collectedLeads = [
             {
-              name: `شركة ${target} الرائدة الأولى`,
+              name: `شركة ${target} العالمية`,
               type: target,
               city: region,
               contact: "+966501234567",
@@ -212,26 +220,18 @@
               pitch_message: `مرحباً إدارة ${target}، ندعوكم لتطوير حضوركم الرقمي عبر منصة 3D Axis لعرض منتجاتكم وخدماتكم في بيئة ثلاثية الأبعاد مبهرة مع أفتار ذكي لخدمة عملائكم على مدار الساعة.`
             },
             {
-              name: `مؤسسة ${target} الحديثة`,
+              name: `مجموعة ${target} الاستثمارية`,
               type: target,
               city: region,
               contact: "+966509876543",
-              suggested_service: "أتمتة الرسائل والتواصل الذكي",
-              pitch_message: `مرحباً بكم، يسعدنا تقديم حلول أتمتة المراسلة والربط الآلي لخدمة العملاء وتسهيل التواصل السريع عبر الواتساب والمنصات الرقمية.`
-            },
-            {
-              name: `مجموعة ${target} المميزة`,
-              type: target,
-              city: region,
-              contact: "+966551122334",
-              suggested_service: "الأفتار الافتراضي بالذكاء الاصطناعي",
-              pitch_message: `مرحباً بكم، نقدم لكم أحدث تقنيات الأفتار الذكي لتمثيل شركتكم والرد التلقائي على استفسارات الزوار والعملاء باحترافية عالية.`
+              suggested_service: "الأفتار الافتراضي ولوحة التعاقد الذكية",
+              pitch_message: `مرحباً بكم، ندعوكم لمعاينة البيئة الافتراضية الخاصة بنا وتجربة نظام العروض والتعاقد الرقمي السريع المتاح عبر منصتنا.`
             }
           ];
         }
 
         renderTable();
-        showStatus(`✅ تم بنجاح جلب وتجهيز ${collectedLeads.length} جهة متخصصة في (${target}) عبر الوكيل الذكي!`, 'success');
+        showStatus(`✅ تم بنجاح جلب وتجهيز ${collectedLeads.length} جهة متخصصة ودعمها بروابط المعاينة والتعاقد!`, 'success');
 
       } catch (error) {
         console.error(error);
@@ -241,13 +241,20 @@
 
     function renderTable() {
       const tableBody = document.getElementById('resultsTable');
+      const agencyUrl = document.getElementById('agencyUrl').value.trim();
+      const demoRoomUrl = document.getElementById('demoRoomUrl').value.trim();
+      
       tableBody.innerHTML = '';
       
       collectedLeads.forEach((item, index) => {
         const cleanPhone = item.contact ? item.contact.replace(/[^0-9+]/g, '') : '';
-        const whatsappText = encodeURIComponent(`مرحباً إدارة ${item.name || ''},\n\n${item.pitch_message || ''}\n\nللتواصل والتنسيق مع وكالة 3D Axis:\nالبريد: ${MY_EMAIL}\nالهاتف: ${MY_PHONE}`);
-        const emailSubject = encodeURIComponent(`عرض تعاون وخدمات تقنية متقدمة لـ ${item.name || ''}`);
-        const emailBody = encodeURIComponent(`مرحباً إدارة ${item.name},\n\n${item.pitch_message}\n\nنحن بانتظار ردكم الكريم للتعاون مع وكالة 3D Axis للحلول الذكية وثلاثية الأبعاد.\n\nمع فائق الاحترام,\nالأستاذ عمر حسان عبره\nبريد: ${MY_EMAIL}\nهاتف: ${MY_PHONE}`);
+        
+        // إعداد رسالة متكاملة مدمجة بالروابط
+        const fullMessage = `${item.pitch_message}\n\n🌐 لمشاهدة ومعاينة الغرفة الافتراضية 3D:\n${demoRoomUrl}\n\n📝 لمعاينة منصة الوكالة ولوحة التعاقد التجاري:\n${agencyUrl}\n\nللتواصل المباشر:\nالأستاذ عمر حسان عبره\nهاتف/واتساب: ${MY_PHONE}\nبريد: ${MY_EMAIL}`;
+
+        const whatsappText = encodeURIComponent(fullMessage);
+        const emailSubject = encodeURIComponent(`دعوة لمعاينة البيئة الافتراضية وخدمات 3D Axis لـ ${item.name || ''}`);
+        const emailBody = encodeURIComponent(fullMessage);
 
         const whatsappLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${whatsappText}` : `https://wa.me/?text=${whatsappText}`;
         const emailLink = `mailto:${MY_EMAIL}?subject=${emailSubject}&body=${emailBody}`;
@@ -258,12 +265,18 @@
           <td>${item.type || '-'}</td>
           <td>${item.city || '-'} <br><small style="color: #38bdf8;">${item.contact || ''}</small></td>
           <td><span class="pitch-tag">${item.suggested_service || 'حلول 3D وذكاء اصطناعي'}</span></td>
-          <td><small>${item.pitch_message || '-'}</small></td>
+          <td>
+            <small>${item.pitch_message || '-'}</small><br>
+            <div style="margin-top: 6px; font-size: 11px;">
+              🔗 <a href="${demoRoomUrl}" target="_blank" style="color: #38bdf8;">معاينة الغرفة 3D</a> | 
+              📄 <a href="${agencyUrl}" target="_blank" style="color: #10b981;">لوحة التعاقد</a>
+            </div>
+          </td>
           <td>
             <div class="action-btns">
               <a href="${whatsappLink}" target="_blank" class="btn-whatsapp" title="إرسال عبر الواتساب">💬 واتساب</a>
               <a href="${emailLink}" class="btn-email" title="إرسال عبر البريد الإلكتروني">📧 إيميل</a>
-              <button class="btn-copy" onclick="copyPitch('${escapeQuotes(item.pitch_message)}')">📋 نسخ</button>
+              <button class="btn-copy" onclick="copyPitch('${escapeQuotes(fullMessage)}')">📋 نسخ العرض كامل</button>
             </div>
           </td>
         </tr>`;
@@ -272,12 +285,12 @@
     }
 
     function escapeQuotes(text) {
-      return text ? text.replace(/'/g, "\\'").replace(/"/g, '&quot;') : '';
+      return text ? text.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n') : '';
     }
 
     function copyPitch(text) {
       navigator.clipboard.writeText(text);
-      alert('📋 تم نسخ العرض التسويقي بنجاح! جاهز للصق.');
+      alert('📋 تم نسخ العرض التسويقي المكتمل شاملاً روابط الغرفة 3D ولوحة التعاقد!');
     }
 
     function showStatus(msg, type) {
@@ -289,14 +302,17 @@
 
     function exportToCSV() {
       if (collectedLeads.length === 0) { alert('لا توجد بيانات لتصديرها بعد!'); return; }
-      let csvContent = "data:text/csv;charset=utf-8,\uFEFFالرقم,اسم الجهة,النوع,المدينة/التواصل,الخدمة المقترحة,رسالة العرض\n";
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFFالرقم,اسم الجهة,النوع,المدينة/التواصل,الخدمة المقترحة,رسالة العرض والروابط\n";
+      const agencyUrl = document.getElementById('agencyUrl').value.trim();
+      const demoRoomUrl = document.getElementById('demoRoomUrl').value.trim();
+
       collectedLeads.forEach((row, idx) => {
-        csvContent += `${idx + 1},${row.name},${row.type},${row.city} / ${row.contact},${row.suggested_service},"${row.pitch_message}"\n`;
+        csvContent += `${idx + 1},${row.name},${row.type},${row.city} / ${row.contact},${row.suggested_service},"${row.pitch_message} - الغرفة: ${demoRoomUrl} - التعاقد: ${agencyUrl}"\n`;
       });
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `Sales_Leads_${Date.now()}.csv`);
+      link.setAttribute("download", `3DAxis_Leads_${Date.now()}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
